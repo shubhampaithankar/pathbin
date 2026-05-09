@@ -13,14 +13,10 @@
 
 .PARAMETER NonInteractive
   Don't prompt for missing user.name / user.email; warn and continue.
-
-.PARAMETER Force
-  Overwrite ~/.gitignore_global even if it exists with non-pathbin content.
 #>
 [CmdletBinding()]
 param(
-  [switch] $NonInteractive,
-  [switch] $Force
+  [switch] $NonInteractive
 )
 $ErrorActionPreference = 'Stop'
 

@@ -146,9 +146,9 @@
       },
       "linux": {
         "via": "apt",
-        "pkg": "python3 python3-pip python3-venv"
+        "pkg": "python3 python3-pip python3-venv python-is-python3"
       },
-      "verify": "python --version"
+      "verify": "python3 --version"
     },
     {
       "name": "uv",

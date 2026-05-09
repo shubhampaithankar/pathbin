@@ -1,0 +1,61 @@
+{
+  "_comment": "pathbin manifest — declarative dev-tool install list. Edit freely; install.ps1 / install.sh consume this. via: scoop | winget | apt | custom (handler dispatched in script).",
+
+  "scoop_buckets": ["main", "extras", "java", "nerd-fonts", "versions"],
+
+  "apt_repos": [
+    { "id": "adoptium",      "key_url": "https://packages.adoptium.net/artifactory/api/gpg/key/public", "list_line": "deb [signed-by=/etc/apt/keyrings/adoptium.gpg] https://packages.adoptium.net/artifactory/deb {CODENAME} main" },
+    { "id": "github-cli",    "key_url": "https://cli.github.com/packages/githubcli-archive-keyring.gpg", "list_line": "deb [arch={ARCH} signed-by=/etc/apt/keyrings/github-cli.gpg] https://cli.github.com/packages stable main" },
+    { "id": "eza",           "key_url": "https://raw.githubusercontent.com/eza-community/eza/main/deb.asc",                "list_line": "deb [signed-by=/etc/apt/keyrings/eza.gpg] http://deb.gierens.de stable main" }
+  ],
+
+  "tools": [
+    { "name": "git",        "category": "vcs",     "win": { "via": "scoop",  "pkg": "main/git" },                    "linux": { "via": "apt",    "pkg": "git" },                       "verify": "git --version" },
+    { "name": "git-lfs",    "category": "vcs",     "win": { "via": "scoop",  "pkg": "main/git-lfs" },                "linux": { "via": "apt",    "pkg": "git-lfs" },                   "verify": "git-lfs --version" },
+    { "name": "gh",         "category": "vcs",     "win": { "via": "scoop",  "pkg": "main/gh" },                     "linux": { "via": "apt",    "pkg": "gh", "repo": "github-cli" }, "verify": "gh --version" },
+
+    { "name": "pwsh",       "category": "shell",   "win": { "via": "scoop",  "pkg": "main/pwsh" },                   "linux": null,                                                    "verify": "pwsh --version" },
+    { "name": "wt",         "category": "shell",   "win": { "via": "scoop",  "pkg": "extras/windows-terminal" },     "linux": null,                                                    "verify": null },
+    { "name": "starship",   "category": "shell",   "win": { "via": "scoop",  "pkg": "main/starship" },               "linux": { "via": "custom", "handler": "starship" },             "verify": "starship --version" },
+
+    { "name": "nvm",        "category": "runtime", "win": { "via": "scoop",  "pkg": "main/nvm" },                    "linux": { "via": "custom", "handler": "nvm" },                  "verify": "nvm version" },
+    { "name": "node",       "category": "runtime", "win": { "via": "custom", "handler": "node-via-nvm" },            "linux": { "via": "custom", "handler": "node-via-nvm" },         "verify": "node --version" },
+    { "name": "bun",        "category": "runtime", "win": { "via": "custom", "handler": "bun" },                     "linux": { "via": "custom", "handler": "bun" },                  "verify": "bun --version" },
+
+    { "name": "python",     "category": "runtime", "win": { "via": "scoop",  "pkg": "versions/python313" },          "linux": { "via": "apt",    "pkg": "python3 python3-pip python3-venv" }, "verify": "python --version" },
+    { "name": "uv",         "category": "runtime", "win": { "via": "scoop",  "pkg": "main/uv" },                     "linux": { "via": "custom", "handler": "uv" },                   "verify": "uv --version" },
+    { "name": "pipx",       "category": "runtime", "win": { "via": "scoop",  "pkg": "main/pipx" },                   "linux": { "via": "apt",    "pkg": "pipx" },                      "verify": "pipx --version" },
+
+    { "name": "rustup",     "category": "runtime", "win": { "via": "custom", "handler": "rustup" },                  "linux": { "via": "custom", "handler": "rustup" },               "verify": "rustup --version" },
+
+    { "name": "jdk21",      "category": "runtime", "win": { "via": "scoop",  "pkg": "java/temurin21-jdk" },          "linux": { "via": "apt",    "pkg": "temurin-21-jdk", "repo": "adoptium" }, "verify": "javac --version" },
+    { "name": "maven",      "category": "runtime", "win": { "via": "scoop",  "pkg": "main/maven" },                  "linux": { "via": "apt",    "pkg": "maven" },                     "verify": "mvn --version" },
+    { "name": "gradle",     "category": "runtime", "win": { "via": "scoop",  "pkg": "main/gradle" },                 "linux": { "via": "apt",    "pkg": "gradle" },                    "verify": "gradle --version" },
+
+    { "name": "go",         "category": "runtime", "win": { "via": "scoop",  "pkg": "main/go" },                     "linux": { "via": "apt",    "pkg": "golang-go" },                 "verify": "go version" },
+
+    { "name": "mingw",      "category": "cpp",     "win": { "via": "scoop",  "pkg": "main/mingw" },                  "linux": null,                                                    "verify": "gcc --version" },
+    { "name": "build-essential", "category": "cpp", "win": null,                                                       "linux": { "via": "apt",    "pkg": "build-essential" },           "verify": "gcc --version" },
+    { "name": "clang",      "category": "cpp",     "win": null,                                                       "linux": { "via": "apt",    "pkg": "clang clangd clang-format clang-tidy lld" }, "verify": "clang --version" },
+    { "name": "cmake",      "category": "cpp",     "win": { "via": "scoop",  "pkg": "main/cmake" },                  "linux": { "via": "apt",    "pkg": "cmake" },                     "verify": "cmake --version" },
+    { "name": "ninja",      "category": "cpp",     "win": { "via": "scoop",  "pkg": "main/ninja" },                  "linux": { "via": "apt",    "pkg": "ninja-build" },              "verify": "ninja --version" },
+
+    { "name": "ripgrep",    "category": "cli",     "win": { "via": "scoop",  "pkg": "main/ripgrep" },                "linux": { "via": "apt",    "pkg": "ripgrep" },                   "verify": "rg --version" },
+    { "name": "fd",         "category": "cli",     "win": { "via": "scoop",  "pkg": "main/fd" },                     "linux": { "via": "apt",    "pkg": "fd-find" },                   "verify": "fd --version" },
+    { "name": "fzf",        "category": "cli",     "win": { "via": "scoop",  "pkg": "main/fzf" },                    "linux": { "via": "apt",    "pkg": "fzf" },                       "verify": "fzf --version" },
+    { "name": "bat",        "category": "cli",     "win": { "via": "scoop",  "pkg": "main/bat" },                    "linux": { "via": "apt",    "pkg": "bat" },                       "verify": "bat --version" },
+    { "name": "eza",        "category": "cli",     "win": { "via": "scoop",  "pkg": "main/eza" },                    "linux": { "via": "apt",    "pkg": "eza", "repo": "eza" },        "verify": "eza --version" },
+    { "name": "jq",         "category": "cli",     "win": { "via": "scoop",  "pkg": "main/jq" },                     "linux": { "via": "apt",    "pkg": "jq" },                        "verify": "jq --version" },
+    { "name": "curl",       "category": "cli",     "win": { "via": "scoop",  "pkg": "main/curl" },                   "linux": { "via": "apt",    "pkg": "curl" },                      "verify": "curl --version" },
+    { "name": "wget",       "category": "cli",     "win": { "via": "scoop",  "pkg": "main/wget" },                   "linux": { "via": "apt",    "pkg": "wget" },                      "verify": "wget --version" },
+    { "name": "httpie",     "category": "cli",     "win": { "via": "scoop",  "pkg": "main/httpie" },                 "linux": { "via": "apt",    "pkg": "httpie" },                    "verify": "http --version" },
+    { "name": "dog",        "category": "cli",     "win": { "via": "scoop",  "pkg": "extras/dog" },                  "linux": { "via": "custom", "handler": "dog" },                  "verify": "dog --version" },
+
+    { "name": "awscli",     "category": "cloud",   "win": { "via": "scoop",  "pkg": "main/aws" },                    "linux": { "via": "custom", "handler": "awscli" },               "verify": "aws --version" },
+
+    { "name": "neovim",     "category": "editor",  "win": { "via": "scoop",  "pkg": "main/neovim" },                 "linux": { "via": "apt",    "pkg": "neovim" },                    "verify": "nvim --version" },
+    { "name": "zed",        "category": "editor",  "win": { "via": "scoop",  "pkg": "extras/zed" },                  "linux": { "via": "custom", "handler": "zed" },                  "verify": "zed --version" },
+
+    { "name": "JetBrainsMono-NF", "category": "font", "win": { "via": "scoop", "pkg": "nerd-fonts/JetBrainsMono-NF" }, "linux": { "via": "custom", "handler": "nerdfont-jbm" },        "verify": null }
+  ]
+}

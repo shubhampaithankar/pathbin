@@ -90,7 +90,6 @@ install_node_via_nvm() {
   if ! have nvm; then c_warn "nvm not loaded -- restart shell and re-run"; return; fi
   nvm install --lts && nvm use --lts && nvm alias default 'lts/*'
 }
-install_starship(){ have starship || curl -sS https://starship.rs/install.sh | sh -s -- -y; }
 install_zed()     { have zed      || curl -fsSL https://zed.dev/install.sh | sh; }
 install_awscli()  {
   have aws && { c_ok "aws present"; return; }
@@ -98,6 +97,11 @@ install_awscli()  {
   curl -fsSL "https://awscli.amazonaws.com/awscli-exe-linux-$(uname -m).zip" -o "$tmp/awscli.zip"
   ( cd "$tmp" && unzip -q awscli.zip && sudo ./aws/install --update )
   rm -rf "$tmp"
+}
+install_httpie() {
+  have http && { c_ok "httpie present"; return; }
+  if have pipx; then pipx install httpie
+  else c_warn "httpie: install pipx first or skip"; fi
 }
 install_dog()     {
   have dog && { c_ok "dog present"; return; }
@@ -121,9 +125,9 @@ dispatch_custom() {
     rustup) install_rustup ;;
     nvm) install_nvm ;;
     node-via-nvm) install_node_via_nvm ;;
-    starship) install_starship ;;
     zed) install_zed ;;
     awscli) install_awscli ;;
+    httpie) install_httpie ;;
     dog) install_dog ;;
     nerdfont-jbm) install_nerdfont_jbm ;;
     *) c_err "no handler for custom/$1" ;;
@@ -186,7 +190,6 @@ export PATH
 export NVM_DIR="$HOME/.nvm"
 [[ -s "$NVM_DIR/nvm.sh" ]] && . "$NVM_DIR/nvm.sh"
 [[ -s "$NVM_DIR/bash_completion" ]] && . "$NVM_DIR/bash_completion"
-command -v starship >/dev/null && eval "$(starship init bash)"
 EOF
 )
 for rc in "$HOME/.bashrc" "$HOME/.zshrc"; do

@@ -29,7 +29,8 @@ function Test-Cmd ($n) { [bool](Get-Command $n -ErrorAction SilentlyContinue) }
 function Install-Scoop {
   if (Test-Cmd 'scoop') { Ok 'scoop already installed'; return }
   Info 'installing scoop'
-  Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force
+  try { Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned -Force -ErrorAction Stop }
+  catch { Warn "Set-ExecutionPolicy skipped: $($_.Exception.Message.Split([char]10)[0])" }
   Invoke-RestMethod -Uri 'https://get.scoop.sh' | Invoke-Expression
 }
 
@@ -67,6 +68,20 @@ function Install-NodeViaNvm {
   & nvm use   lts
 }
 
+function Install-Httpie {
+  if (Test-Cmd 'http') { Ok 'httpie already installed'; return }
+  if (-not (Test-Cmd 'pipx')) { Warn 'pipx required for httpie -- install runtime category first'; return }
+  Info 'installing httpie via pipx'
+  & pipx install httpie
+}
+
+function Install-Dog {
+  if (Test-Cmd 'dog') { Ok 'dog already installed'; return }
+  if (-not (Test-Cmd 'cargo')) { Warn 'cargo required for dog -- install runtime category first'; return }
+  Info 'installing dog via cargo (dogdns)'
+  & cargo install dogdns
+}
+
 function Install-NerdFontJBM { Ok 'JetBrainsMono-NF handled by scoop bucket nerd-fonts (already queued)' }
 
 function Install-Tool ($tool) {
@@ -80,6 +95,8 @@ function Install-Tool ($tool) {
         'bun'           { Install-Bun }
         'rustup'        { Install-Rustup }
         'node-via-nvm'  { Install-NodeViaNvm }
+        'httpie'        { Install-Httpie }
+        'dog'           { Install-Dog }
         'nerdfont-jbm'  { Install-NerdFontJBM }
         default         { Err "no handler for custom/$($win.handler)" }
       }
@@ -126,7 +143,6 @@ $shim = @'
 # pathbin: ensure user-scope tool dirs are on PATH
 $extra = @("$env:USERPROFILE\.bun\bin", "$env:USERPROFILE\.cargo\bin", "$env:USERPROFILE\.local\bin") | Where-Object { Test-Path $_ }
 foreach ($d in $extra) { if (-not ($env:Path -split ';' -contains $d)) { $env:Path = "$d;$env:Path" } }
-if (Get-Command starship -ErrorAction SilentlyContinue) { Invoke-Expression (&starship init powershell) }
 '@
 if (-not (Test-Path $PROFILE) -or -not (Select-String -Path $PROFILE -Pattern '# pathbin:' -Quiet)) {
   Add-Content -Path $PROFILE -Value "`n$shim`n"

@@ -8,20 +8,18 @@ Driven by [`manifest.json`](./manifest.json). Edit that file to add/remove tools
 
 | Category | Tools |
 |---|---|
-| **VCS** | git, git-lfs, gh |
-| **Shell** | pwsh 7 (Win), Windows Terminal (Win), starship |
+| **VCS** | git, git-lfs, gh, git-filter-repo |
+| **Shell** | pwsh 7 (Win), Windows Terminal (Win) |
 | **Runtimes** | Node (via nvm), Bun (official), Python 3.13, uv, pipx, Rust (rustup), JDK 21 (Temurin), Maven, Gradle, Go |
 | **C/C++** | MinGW-w64 + CMake + Ninja (Win); build-essential + clang + cmake + ninja (Linux) |
 | **CLI** | ripgrep, fd, fzf, bat, eza, jq, curl, wget, httpie, dog |
 | **Cloud** | AWS CLI |
-| **Editors** | Neovim, Zed |
+| **Editors** | micro, Zed |
 | **Fonts** | JetBrainsMono Nerd Font |
 
 Windows uses **scoop** as the primary package manager (auto-bootstrapped). Linux uses **apt** with extra repos for Adoptium / GitHub CLI / eza added on demand.
 
 ## Bootstrap on a fresh machine
-
-> Replace `shubhampaithankar` in the URLs below (and in the two scripts) with your GitHub username after pushing this repo.
 
 ### Windows (PowerShell)
 

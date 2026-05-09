@@ -1,0 +1,20 @@
+# Force LF on all text files regardless of platform.
+# install.sh MUST be LF or bash on Linux fails on the shebang line.
+# manifest.json MUST be LF so jq output (consumed by both shells) doesn't carry stray CRs.
+* text=auto eol=lf
+
+# Explicitly LF for these critical files
+*.sh   text eol=lf
+*.json text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.md   text eol=lf
+
+# PowerShell: LF is fine; let it ride with the global default.
+*.ps1  text eol=lf
+
+# Binary files (none today, but lock the policy)
+*.png binary
+*.jpg binary
+*.zip binary
+*.ttf binary

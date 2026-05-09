@@ -378,6 +378,19 @@
       "verify": "jq --version"
     },
     {
+      "name": "shellcheck",
+      "category": "cli",
+      "win": {
+        "via": "scoop",
+        "pkg": "main/shellcheck"
+      },
+      "linux": {
+        "via": "apt",
+        "pkg": "shellcheck"
+      },
+      "verify": "shellcheck --version"
+    },
+    {
       "name": "curl",
       "category": "cli",
       "win": {

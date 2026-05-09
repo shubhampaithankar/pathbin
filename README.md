@@ -12,7 +12,7 @@ Driven by [`manifest.json`](./manifest.json). Edit that file to add/remove tools
 | **Shell** | pwsh 7 (Win), Windows Terminal (Win) |
 | **Runtimes** | Node (via nvm), Bun (official), Python 3.13, uv, pipx, Rust (rustup), JDK 21 (Temurin), Maven, Gradle, Go |
 | **C/C++** | MinGW-w64 + CMake + Ninja (Win); build-essential + clang + cmake + ninja (Linux) |
-| **CLI** | ripgrep, fd, fzf, bat, eza, jq, curl, wget, httpie, dog |
+| **CLI** | ripgrep, fd, fzf, bat, eza, jq, shellcheck, curl, wget, httpie, dog |
 | **Cloud** | AWS CLI |
 | **Editors** | micro, Zed |
 | **Fonts** | JetBrainsMono Nerd Font |

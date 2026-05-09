@@ -13,9 +13,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - name: jq parses
         run: jq -e '.tools | length' manifest.json
-      - name: every tool has name + category + verify (or null)
+
+      - name: every tool has required fields
         run: |
           jq -e '
             .tools
@@ -30,11 +32,12 @@ jobs:
               )
             | all
           ' manifest.json
-      - name: every "via: custom" handler is referenced in BOTH scripts
+
+      - name: custom handlers exist in BOTH scripts
         run: |
           set -e
-          win_handlers=$(jq -r '.tools[] | select(.win.via=="custom") | .win.handler' manifest.json | tr -d '' | sort -u)
-          lnx_handlers=$(jq -r '.tools[] | select(.linux.via=="custom") | .linux.handler' manifest.json | tr -d '' | sort -u)
+          win_handlers=$(jq -r '.tools[] | select(.win.via=="custom") | .win.handler' manifest.json | tr -d $'\r' | sort -u)
+          lnx_handlers=$(jq -r '.tools[] | select(.linux.via=="custom") | .linux.handler' manifest.json | tr -d $'\r' | sort -u)
           missing=0
           for h in $win_handlers; do
             grep -q "'$h'" install.ps1 || { echo "::error file=install.ps1::missing case for custom handler '$h'"; missing=1; }
@@ -43,11 +46,12 @@ jobs:
             grep -q "^[[:space:]]*$h)" install.sh || { echo "::error file=install.sh::missing case for custom handler '$h'"; missing=1; }
           done
           exit $missing
-      - name: every "linux.repo" id has a definition in apt_repos
+
+      - name: linux.repo ids are defined in apt_repos
         run: |
           set -e
-          repo_ids=$(jq -r '.tools[].linux.repo // empty' manifest.json | tr -d '' | sort -u)
-          defined=$(jq -r '.apt_repos[].id' manifest.json | tr -d '' | sort -u)
+          repo_ids=$(jq -r '.tools[].linux.repo // empty' manifest.json | tr -d $'\r' | sort -u)
+          defined=$(jq -r '.apt_repos[].id' manifest.json | tr -d $'\r' | sort -u)
           missing=0
           for r in $repo_ids; do
             grep -qx "$r" <<<"$defined" || { echo "::error file=manifest.json::repo '$r' referenced but not in apt_repos"; missing=1; }

@@ -19,6 +19,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+[Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
 $script:RemoteManifest  = 'https://raw.githubusercontent.com/shubhampaithankar/pathbin/main/manifest.json'
 
 function Info ($m) { Write-Host "==> $m" -ForegroundColor Cyan }
@@ -26,6 +27,8 @@ function Ok   ($m) { Write-Host "  ok  $m" -ForegroundColor Green }
 function Warn ($m) { Write-Host "  !!  $m" -ForegroundColor Yellow }
 function Err  ($m) { Write-Host "  XX  $m" -ForegroundColor Red }
 function Test-Cmd ($n) { [bool](Get-Command $n -ErrorAction SilentlyContinue) }
+function Update-Path { $env:Path = [System.Environment]::GetEnvironmentVariable('Path','User') + ';' + [System.Environment]::GetEnvironmentVariable('Path','Machine') }
+function Test-Admin { ([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator) }
 
 function Install-Scoop {
   if (Test-Cmd 'scoop') { Ok 'scoop already installed'; return }
@@ -89,7 +92,7 @@ function Install-Tool ($tool) {
   $win = $tool.win
   if ($null -eq $win) { return }
   switch ($win.via) {
-    'scoop'  { & scoop install $win.pkg }
+    'scoop'  { & scoop install $win.pkg; Update-Path }
     'winget' { & winget install --id $win.pkg --accept-source-agreements --accept-package-agreements -e -h }
     'custom' {
       switch ($win.handler) {
@@ -117,6 +120,7 @@ function Verify-Tool ($tool) {
 }
 
 Info 'pathbin Windows bootstrap'
+if (-not (Test-Admin)) { Warn 'not running elevated; nvm-windows needs admin to switch Node versions later (re-launch as admin to use `nvm use lts` after install)' }
 
 if (-not $Manifest) {
   $local = Join-Path $PSScriptRoot 'manifest.json'
@@ -129,7 +133,7 @@ Install-Scoop
 Add-Buckets $raw.scoop_buckets
 
 $tools = $raw.tools
-if ($Categories.Count -gt 0) { $tools = $tools | Where-Object { $Categories -contains $_.category } }
+if ($Categories.Count -gt 0) { $tools = $tools | Where-Object { $_.category -eq 'prereq' -or $Categories -contains $_.category } }
 
 $pass1 = $tools | Where-Object { $_.win -and $_.win.handler -ne 'node-via-nvm' }
 $pass2 = $tools | Where-Object { $_.win -and $_.win.handler -eq 'node-via-nvm' }

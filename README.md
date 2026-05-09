@@ -8,6 +8,7 @@ Driven by [`manifest.json`](./manifest.json). Edit that file to add/remove tools
 
 | Category | Tools |
 |---|---|
+| **Prereqs (Win)** | VC++ 2022 Redistributable, WebView2 — installed first, regardless of `-Categories` filter |
 | **VCS** | git, git-lfs, gh, git-filter-repo |
 | **Shell** | pwsh 7 (Win), Windows Terminal (Win) |
 | **Runtimes** | Node (via nvm), Bun (official), Python 3.13, uv, pipx, Rust (rustup), JDK 21 (Temurin), Maven, Gradle, Go |

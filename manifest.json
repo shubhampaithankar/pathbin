@@ -26,6 +26,26 @@
   ],
   "tools": [
     {
+      "name": "vcredist2022",
+      "category": "prereq",
+      "win": {
+        "via": "scoop",
+        "pkg": "extras/vcredist2022"
+      },
+      "linux": null,
+      "verify": null
+    },
+    {
+      "name": "webview2",
+      "category": "prereq",
+      "win": {
+        "via": "scoop",
+        "pkg": "extras/webview2"
+      },
+      "linux": null,
+      "verify": null
+    },
+    {
       "name": "git",
       "category": "vcs",
       "win": {

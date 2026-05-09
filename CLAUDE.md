@@ -55,8 +55,11 @@ Each `tools[]` row:
 
 ## Key Files
 - `manifest.json` — declarative tool list + scoop buckets + apt repos. Edit this 95% of the time.
-- `install.ps1` — Windows dispatcher. `Install-*` functions are the custom handlers; the `switch ($win.via)` block is the dispatch point.
-- `install.sh` — Linux dispatcher. `install_*` functions are the custom handlers; `dispatch_custom()` is the dispatch point.
+- `install.ps1` / `install.sh` — platform dispatchers. Custom handlers live as `Install-*` (PS) / `install_*` (bash); dispatch happens in `switch ($win.via)` / case statements. Both end by invoking the configure step (skippable via `-SkipConfigure` / `--skip-configure`).
+- `configure.ps1` / `configure.sh` — apply user-level git config from `configs/git/`. Idempotent; safe to re-run after `git pull`. Identity resolution: `PATHBIN_GIT_NAME` / `PATHBIN_GIT_EMAIL` env > existing `git config` > prompt.
+- `configs/git/gitconfig` — included into `~/.gitconfig` via `include.path`; no personal data.
+- `configs/git/gitignore_global` — copied to `~/.gitignore_global`; wired via `core.excludesfile`.
+- `.github/workflows/validate.yml` — CI: manifest schema, custom-handler cross-ref, repo cross-ref, bash + PowerShell parsers, shellcheck, PSScriptAnalyzer.
 - `README.md` — user-facing bootstrap docs and one-liner curl/irm commands.
 
 ## Do NOT

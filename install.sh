@@ -13,12 +13,14 @@ set -euo pipefail
 REMOTE_MANIFEST='https://raw.githubusercontent.com/shubhampaithankar/pathbin/main/manifest.json'
 MANIFEST=""
 CATEGORIES=""
+SKIP_CONFIGURE=0
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
-    --manifest)   MANIFEST="$2"; shift 2 ;;
-    --categories) CATEGORIES="$2"; shift 2 ;;
-    -h|--help)    sed -n '2,12p' "$0"; exit 0 ;;
+    --manifest)        MANIFEST="$2"; shift 2 ;;
+    --categories)      CATEGORIES="$2"; shift 2 ;;
+    --skip-configure)  SKIP_CONFIGURE=1; shift ;;
+    -h|--help)         sed -n '2,12p' "$0"; exit 0 ;;
     *) echo "unknown arg: $1" >&2; exit 1 ;;
   esac
 done
@@ -215,5 +217,15 @@ for row in "${tool_rows[@]}"; do
     c_warn "$name: $cmd not on PATH (open a new shell?)"
   fi
 done
+
+cfg="$(dirname "$(readlink -f "${BASH_SOURCE[0]:-$0}")")/configure.sh"
+if [[ "$SKIP_CONFIGURE" == 0 && -f "$cfg" ]]; then
+  c_info "applying git configuration (use --skip-configure to skip)"
+  bash "$cfg" --non-interactive
+elif [[ "$SKIP_CONFIGURE" == 1 ]]; then
+  c_ok "configure step skipped (--skip-configure)"
+elif [[ ! -f "$cfg" ]]; then
+  c_warn "configure.sh not found beside install.sh -- skipping git config"
+fi
 
 c_info "done. Open a new shell or 'source ~/.bashrc' to pick up PATH changes."

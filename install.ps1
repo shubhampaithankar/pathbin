@@ -13,8 +13,9 @@
 #>
 [CmdletBinding()]
 param(
-  [string]   $Manifest   = '',
-  [string[]] $Categories = @()
+  [string]   $Manifest       = '',
+  [string[]] $Categories     = @(),
+  [switch]   $SkipConfigure
 )
 
 $ErrorActionPreference = 'Stop'
@@ -151,4 +152,11 @@ if (-not (Test-Path $PROFILE) -or -not (Select-String -Path $PROFILE -Pattern '#
 
 Write-Host "`n==> verification" -ForegroundColor Cyan
 foreach ($t in $tools) { Verify-Tool $t }
+$cfg = Join-Path $PSScriptRoot 'configure.ps1'
+if (-not $SkipConfigure -and (Test-Path $cfg)) {
+  Write-Host "`n==> applying git configuration (use -SkipConfigure to skip)" -ForegroundColor Cyan
+  & $cfg -NonInteractive
+} elseif ($SkipConfigure) { Ok 'configure step skipped (-SkipConfigure)' }
+elseif (-not (Test-Path $cfg)) { Warn 'configure.ps1 not found beside install.ps1 -- skipping git config' }
+
 Write-Host "`n==> done. Open a new shell to pick up PATH changes." -ForegroundColor Cyan

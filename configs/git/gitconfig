@@ -1,0 +1,77 @@
+# pathbin global git config — included from ~/.gitconfig via include.path.
+# Personal data (user.name, user.email, signing key) lives in ~/.gitconfig
+# so it never lands in this repo.
+
+[init]
+    defaultBranch = main
+
+[core]
+    autocrlf = false
+    eol = lf
+    longpaths = true
+    fsmonitor = true
+    untrackedCache = true
+
+[pull]
+    rebase = true
+    ff = only
+
+[push]
+    autoSetupRemote = true
+    default = simple
+    followTags = true
+
+[fetch]
+    prune = true
+    pruneTags = true
+    parallel = 0
+
+[merge]
+    conflictStyle = zdiff3
+
+[rebase]
+    autoStash = true
+    autoSquash = true
+    updateRefs = true
+
+[rerere]
+    enabled = true
+    autoupdate = true
+
+[diff]
+    algorithm = histogram
+    colorMoved = default
+    renames = copies
+    mnemonicPrefix = true
+
+[branch]
+    sort = -committerdate
+
+[tag]
+    sort = -version:refname
+
+[column]
+    ui = auto
+
+[help]
+    autocorrect = prompt
+
+[advice]
+    detachedHead = false
+    addIgnoredFile = false
+
+[color]
+    ui = auto
+
+[alias]
+    st     = status -sb
+    co     = checkout
+    sw     = switch
+    br     = branch
+    cm     = commit -m
+    amend  = commit --amend --no-edit
+    last   = log -1 HEAD
+    lg     = log --oneline --graph --decorate --all -20
+    unstage = restore --staged
+    undo   = reset --soft HEAD~1
+    aliases = config --get-regexp '^alias\\.'

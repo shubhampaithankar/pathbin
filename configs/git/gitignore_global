@@ -1,0 +1,56 @@
+# pathbin global gitignore — installed at ~/.gitignore_global,
+# referenced via core.excludesfile. Catches per-machine cruft so
+# every repo doesn't have to.
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
+
+# Editor / IDE state
+*.swp
+*.swo
+*~
+.vscode/
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.iml
+.fleet/
+.zed/
+.history/
+.aider*
+
+# Local environment overrides
+.env.local
+.env.*.local
+.envrc.local
+.direnv/
+
+# Tooling caches that shouldn't be per-repo
+.cache/
+*.log
+*.pid
+
+# Python (often forgotten)
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# JS (often forgotten)
+.npm/
+.yarn/cache/
+.yarn/install-state.gz
+
+# Misc
+*.tmp
+*.bak
+*.orig

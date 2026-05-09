@@ -49,6 +49,30 @@ Both scripts are idempotent — re-running skips anything already installed.
 ./install.sh --manifest ./manifest.json
 ```
 
+
+
+## Git configuration
+
+After install, the script invokes `configure.ps1` / `configure.sh` to set up sensible global git defaults from `configs/git/`:
+
+- `gitconfig` -- includes `init.defaultBranch=main`, `pull.rebase=true`, `push.autoSetupRemote=true`, `rerere.enabled`, `merge.conflictStyle=zdiff3`, `diff.algorithm=histogram`, plus a small set of aliases (`st`, `lg`, `amend`, `undo`).
+- `gitignore_global` -- catches per-machine cruft (`.DS_Store`, editor swap files, IDE state, language caches) so individual repos don't have to.
+
+Personal data (`user.name`, `user.email`) is resolved from env vars first, then existing git config, then prompts (skipped in `--non-interactive` mode):
+
+```bash
+PATHBIN_GIT_NAME='Your Name' PATHBIN_GIT_EMAIL='you@example.com' ./install.sh
+```
+
+Run configure standalone any time to re-sync after a `git pull`:
+
+```powershell
+.\configure.ps1                 # interactive prompts if name/email missing
+.\configure.ps1 -NonInteractive # warn instead of prompting
+```
+
+Skip the configure step entirely with `-SkipConfigure` (PS) / `--skip-configure` (bash) on the install command.
+
 ## Editing the manifest
 
 Each tool row:

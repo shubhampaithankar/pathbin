@@ -86,19 +86,6 @@
       "verify": "gh --version"
     },
     {
-      "name": "git-filter-repo",
-      "category": "vcs",
-      "win": {
-        "via": "scoop",
-        "pkg": "main/git-filter-repo"
-      },
-      "linux": {
-        "via": "apt",
-        "pkg": "git-filter-repo"
-      },
-      "verify": "git-filter-repo --version"
-    },
-    {
       "name": "pwsh",
       "category": "shell",
       "win": {
@@ -195,6 +182,19 @@
         "pkg": "pipx"
       },
       "verify": "pipx --version"
+    },
+    {
+      "name": "git-filter-repo",
+      "category": "vcs",
+      "win": {
+        "via": "scoop",
+        "pkg": "main/git-filter-repo"
+      },
+      "linux": {
+        "via": "apt",
+        "pkg": "git-filter-repo"
+      },
+      "verify": "git-filter-repo --version"
     },
     {
       "name": "rustup",

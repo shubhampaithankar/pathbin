@@ -15,7 +15,7 @@ Driven by [`manifest.json`](./manifest.json). Edit that file to add/remove tools
 | **C/C++** | MinGW-w64 + CMake + Ninja (Win); build-essential + clang + cmake + ninja (Linux) |
 | **CLI** | ripgrep, fd, fzf, bat, eza, jq, shellcheck, curl, wget, httpie, dog |
 | **Cloud** | AWS CLI |
-| **Editors** | micro, Zed |
+| **Editors** | micro, Zed, Terax |
 | **Fonts** | JetBrainsMono Nerd Font |
 
 Windows uses **scoop** as the primary package manager (auto-bootstrapped). Linux uses **apt** with extra repos for Adoptium / GitHub CLI / eza added on demand.
@@ -56,7 +56,7 @@ Both scripts are idempotent — re-running skips anything already installed.
 
 After install, the script invokes `configure.ps1` / `configure.sh` to set up sensible global git defaults from `configs/git/`:
 
-- `gitconfig` -- includes `init.defaultBranch=main`, `pull.rebase=true`, `push.autoSetupRemote=true`, `rerere.enabled`, `merge.conflictStyle=zdiff3`, `diff.algorithm=histogram`, plus a small set of aliases (`st`, `lg`, `amend`, `undo`).
+- `gitconfig` -- includes `init.defaultBranch=main`, `pull.rebase=false` + `pull.ff=true` (plain-merge pulls, fast-forward when possible), `push.autoSetupRemote=true`, `rerere.enabled`, `merge.conflictStyle=zdiff3`, `diff.algorithm=histogram`, plus a small set of aliases (`st`, `lg`, `amend`, `undo`).
 - `gitignore_global` -- catches per-machine cruft (`.DS_Store`, editor swap files, IDE state, language caches) so individual repos don't have to.
 
 Personal data (`user.name`, `user.email`) is resolved from env vars first, then existing git config, then prompts (skipped in `--non-interactive` mode):

@@ -88,6 +88,22 @@ function Install-Dog {
 
 function Install-NerdFontJBM { Ok 'JetBrainsMono-NF handled by scoop bucket nerd-fonts (already queued)' }
 
+function Install-Terax {
+  $installed = @(
+    (Join-Path $env:LOCALAPPDATA 'Terax\Terax.exe'),
+    (Join-Path ${env:ProgramFiles} 'Terax\Terax.exe')
+  ) | Where-Object { Test-Path $_ } | Select-Object -First 1
+  if ($installed) { Ok "terax already installed ($installed)"; return }
+  Info 'installing terax (latest GitHub release)'
+  $rel = Invoke-RestMethod -Uri 'https://api.github.com/repos/crynta/terax-ai/releases/latest' -Headers @{ 'User-Agent' = 'pathbin' }
+  $asset = $rel.assets | Where-Object { $_.name -match '_x64-setup\.exe$' } | Select-Object -First 1
+  if (-not $asset) { Err 'no Windows .exe setup asset in latest terax release'; return }
+  $tmp = Join-Path $env:TEMP $asset.name
+  Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $tmp -UseBasicParsing
+  Start-Process -FilePath $tmp -ArgumentList '/S' -Wait
+  Remove-Item $tmp -Force -ErrorAction SilentlyContinue
+}
+
 function Install-Tool ($tool) {
   $win = $tool.win
   if ($null -eq $win) { return }
@@ -102,6 +118,7 @@ function Install-Tool ($tool) {
         'httpie'        { Install-Httpie }
         'dog'           { Install-Dog }
         'nerdfont-jbm'  { Install-NerdFontJBM }
+        'terax'         { Install-Terax }
         default         { Err "no handler for custom/$($win.handler)" }
       }
     }

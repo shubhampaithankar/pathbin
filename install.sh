@@ -109,6 +109,24 @@ install_dog()     {
   have dog && { c_ok "dog present"; return; }
   if have cargo; then cargo install dogdns; else c_warn "dog: install rustup first or skip"; fi
 }
+install_terax() {
+  have terax && { c_ok "terax present"; return; }
+  local arch url tmp
+  arch="$(dpkg --print-architecture)"
+  if [[ "$arch" != "amd64" ]]; then
+    c_warn "terax: no .deb for arch $arch (only amd64 published upstream)"
+    return
+  fi
+  url="$(curl -fsSL https://api.github.com/repos/crynta/terax-ai/releases/latest \
+    | jq -r '.assets[] | select(.name | test("_amd64\\.deb$")) | .browser_download_url' \
+    | head -n1)"
+  if [[ -z "$url" ]]; then c_warn "terax: no .deb asset in latest release"; return; fi
+  tmp="$(mktemp -d)"
+  curl -fsSL "$url" -o "$tmp/terax.deb"
+  sudo apt-get install -y "$tmp/terax.deb"
+  rm -rf "$tmp"
+}
+
 install_nerdfont_jbm() {
   local dir="$HOME/.local/share/fonts"
   if [[ -f "$dir/JetBrainsMonoNerdFont-Regular.ttf" ]]; then c_ok "JetBrainsMono NF present"; return; fi
@@ -132,6 +150,7 @@ dispatch_custom() {
     httpie) install_httpie ;;
     dog) install_dog ;;
     nerdfont-jbm) install_nerdfont_jbm ;;
+    terax) install_terax ;;
     *) c_err "no handler for custom/$1" ;;
   esac
 }

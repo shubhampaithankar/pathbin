@@ -20,7 +20,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 # Validate before commit
 jq -e '.tools | length' manifest.json                    # parse + count tools
 bash -n install.sh                                        # bash syntax check
-[System.Management.Automation.Language.Parser]::ParseFile('install.ps1', [ref]$null, [ref]([System.Management.Automation.Language.ParseError[]]@()))   # PS parse check
+$errs = $null; [void][System.Management.Automation.Language.Parser]::ParseFile('install.ps1', [ref]$null, [ref]$errs); if ($errs) { $errs } else { 'ps1 OK' }   # PS parse check
 
 # Run locally (against sibling manifest)
 .\install.ps1                              # full install, all categories
@@ -28,6 +28,10 @@ bash -n install.sh                                        # bash syntax check
 .\install.ps1 -Manifest .\manifest.json    # explicit manifest path
 ./install.sh                               # Linux equivalents
 ./install.sh --categories runtime,cli
+
+# Re-sync git config after pulling new commits (idempotent)
+.\configure.ps1                            # Windows; -NonInteractive to skip prompts
+./configure.sh                             # Linux; --non-interactive to skip prompts
 ```
 
 There are no unit tests, no build step, no lint config. Validation = the three syntax checks above.
@@ -44,7 +48,7 @@ Each `tools[]` row:
 - `win` or `linux` may be `null` to skip that platform.
 - `via: custom` requires a matching handler in BOTH scripts (`switch ($win.handler)` block in `install.ps1`, `dispatch_custom()` in `install.sh`).
 - `via: apt` with `repo:` requires a matching entry in top-level `apt_repos[]`. Repo `list_line` supports `{CODENAME}` and `{ARCH}` placeholders.
-- `verify` first token is used to test PATH presence; full string is run for output.
+- `verify` first token is used to test PATH presence; full string is run for output. `verify: null` skips verification entirely (use for tools with no CLI: redistributables, fonts, GUI editors).
 
 ## Conventions
 - **Manifest is source of truth.** New tool → edit `manifest.json` only. Never hardcode a tool list inside the scripts.
@@ -52,6 +56,7 @@ Each `tools[]` row:
 - **Idempotency is non-negotiable.** Every install path must short-circuit when the tool is already present. Use `Test-Cmd` (PS) / `have` (bash) before installing.
 - **PATH changes go through profile shims**, not `setx /m` or `/etc/profile`. User-scope only — no admin required beyond apt.
 - **Repo URL placeholder:** `<YOUR-USER>` appears in `install.ps1`, `install.sh`, and `README.md`. Search-and-replace before the first push.
+- **CI invariants enforced by `validate.yml`:** every `via: custom` handler has a function defined in both scripts; every `repo:` reference resolves to an `apt_repos[]` entry; both scripts parse; shellcheck + PSScriptAnalyzer clean. A change that breaks any of these will fail CI — verify locally before pushing.
 
 ## Key Files
 - `manifest.json` — declarative tool list + scoop buckets + apt repos. Edit this 95% of the time.

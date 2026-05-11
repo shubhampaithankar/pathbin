@@ -502,6 +502,19 @@
       "verify": "zed --version"
     },
     {
+      "name": "terax",
+      "category": "editor",
+      "win": {
+        "via": "custom",
+        "handler": "terax"
+      },
+      "linux": {
+        "via": "custom",
+        "handler": "terax"
+      },
+      "verify": null
+    },
+    {
       "name": "JetBrainsMono-NF",
       "category": "font",
       "win": {

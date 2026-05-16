@@ -12,7 +12,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Manifest: JSON (`manifest.json`) — schema is informal but stable; see "Manifest schema" below
 - Windows installer: PowerShell 5.1+ compatible (must work with the OS-default `powershell.exe`, not just `pwsh` 7)
 - Linux installer: bash 4+, targets Debian/Ubuntu/WSL via `apt` only (other distros not yet supported)
-- Package managers driven: `scoop` (primary, Win), `winget` (fallback, Win), `apt` (Linux), plus per-tool official installers
+- Package managers driven: `winget` (Win), `apt` (Linux), plus per-tool custom handlers for tools with no winget/apt package
 
 ## Commands
 
@@ -41,12 +41,12 @@ There are no unit tests, no build step, no lint config. Validation = the three s
 Each `tools[]` row:
 ```json
 { "name": "<id>", "category": "<group>",
-  "win":   { "via": "scoop|winget|custom", "pkg": "<bucket/name>" | "handler": "<name>", "repo": "<id>?" },
+  "win":   { "via": "winget|custom", "pkg": "<winget-id>" | "handler": "<name>" },
   "linux": { "via": "apt|custom",          "pkg": "<package>"      | "handler": "<name>", "repo": "<id>?" },
   "verify": "<cmd that prints version>" }
 ```
 - `win` or `linux` may be `null` to skip that platform.
-- `via: custom` requires a matching handler in BOTH scripts (`switch ($win.handler)` block in `install.ps1`, `dispatch_custom()` in `install.sh`).
+- `via: custom` requires a matching handler in that platform's script: `switch ($win.handler)` in `install.ps1` for `win`, `dispatch_custom()` in `install.sh` for `linux`. A handler can be Windows-only or Linux-only — CI cross-refs each platform's handlers against its own script.
 - `via: apt` with `repo:` requires a matching entry in top-level `apt_repos[]`. Repo `list_line` supports `{CODENAME}` and `{ARCH}` placeholders.
 - `verify` first token is used to test PATH presence; full string is run for output. `verify: null` skips verification entirely (use for tools with no CLI: redistributables, fonts, GUI editors).
 
@@ -59,7 +59,7 @@ Each `tools[]` row:
 - **CI invariants enforced by `validate.yml`:** every `via: custom` handler has a function defined in both scripts; every `repo:` reference resolves to an `apt_repos[]` entry; both scripts parse; shellcheck + PSScriptAnalyzer clean. A change that breaks any of these will fail CI — verify locally before pushing.
 
 ## Key Files
-- `manifest.json` — declarative tool list + scoop buckets + apt repos. Edit this 95% of the time.
+- `manifest.json` — declarative tool list + apt repos. Edit this 95% of the time.
 - `install.ps1` / `install.sh` — platform dispatchers. Custom handlers live as `Install-*` (PS) / `install_*` (bash); dispatch happens in `switch ($win.via)` / case statements. Both end by invoking the configure step (skippable via `-SkipConfigure` / `--skip-configure`).
 - `configure.ps1` / `configure.sh` — apply user-level git config from `configs/git/`. Idempotent; safe to re-run after `git pull`. Identity resolution: `PATHBIN_GIT_NAME` / `PATHBIN_GIT_EMAIL` env > existing `git config` > prompt.
 - `configs/git/gitconfig` — included into `~/.gitconfig` via `include.path`; no personal data.

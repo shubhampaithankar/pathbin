@@ -1,12 +1,5 @@
 {
-  "_comment": "pathbin manifest \u2014 declarative dev-tool install list. Edit freely; install.ps1 / install.sh consume this. via: scoop | winget | apt | custom (handler dispatched in script).",
-  "scoop_buckets": [
-    "main",
-    "extras",
-    "java",
-    "nerd-fonts",
-    "versions"
-  ],
+  "_comment": "pathbin manifest — declarative dev-tool install list. Edit freely; install.ps1 / install.sh consume this. via: winget | apt | custom (handler dispatched in script).",
   "apt_repos": [
     {
       "id": "adoptium",
@@ -29,8 +22,8 @@
       "name": "vcredist2022",
       "category": "prereq",
       "win": {
-        "via": "scoop",
-        "pkg": "extras/vcredist2022"
+        "via": "winget",
+        "pkg": "Microsoft.VCRedist.2015+.x64"
       },
       "linux": null,
       "verify": null
@@ -39,8 +32,8 @@
       "name": "webview2",
       "category": "prereq",
       "win": {
-        "via": "scoop",
-        "pkg": "extras/webview2"
+        "via": "winget",
+        "pkg": "Microsoft.EdgeWebView2Runtime"
       },
       "linux": null,
       "verify": null
@@ -49,8 +42,8 @@
       "name": "git",
       "category": "vcs",
       "win": {
-        "via": "scoop",
-        "pkg": "main/git"
+        "via": "winget",
+        "pkg": "Git.Git"
       },
       "linux": {
         "via": "apt",
@@ -62,8 +55,8 @@
       "name": "git-lfs",
       "category": "vcs",
       "win": {
-        "via": "scoop",
-        "pkg": "main/git-lfs"
+        "via": "winget",
+        "pkg": "GitHub.GitLFS"
       },
       "linux": {
         "via": "apt",
@@ -75,8 +68,8 @@
       "name": "gh",
       "category": "vcs",
       "win": {
-        "via": "scoop",
-        "pkg": "main/gh"
+        "via": "winget",
+        "pkg": "GitHub.cli"
       },
       "linux": {
         "via": "apt",
@@ -89,8 +82,8 @@
       "name": "pwsh",
       "category": "shell",
       "win": {
-        "via": "scoop",
-        "pkg": "main/pwsh"
+        "via": "winget",
+        "pkg": "Microsoft.PowerShell"
       },
       "linux": null,
       "verify": "pwsh --version"
@@ -99,8 +92,8 @@
       "name": "wt",
       "category": "shell",
       "win": {
-        "via": "scoop",
-        "pkg": "extras/windows-terminal"
+        "via": "winget",
+        "pkg": "Microsoft.WindowsTerminal"
       },
       "linux": null,
       "verify": null
@@ -109,8 +102,8 @@
       "name": "nvm",
       "category": "runtime",
       "win": {
-        "via": "scoop",
-        "pkg": "main/nvm"
+        "via": "winget",
+        "pkg": "CoreyButler.NVMforWindows"
       },
       "linux": {
         "via": "custom",
@@ -148,8 +141,8 @@
       "name": "python",
       "category": "runtime",
       "win": {
-        "via": "scoop",
-        "pkg": "versions/python313"
+        "via": "winget",
+        "pkg": "Python.Python.3.13"
       },
       "linux": {
         "via": "apt",
@@ -161,8 +154,8 @@
       "name": "uv",
       "category": "runtime",
       "win": {
-        "via": "scoop",
-        "pkg": "main/uv"
+        "via": "winget",
+        "pkg": "astral-sh.uv"
       },
       "linux": {
         "via": "custom",
@@ -174,8 +167,8 @@
       "name": "pipx",
       "category": "runtime",
       "win": {
-        "via": "scoop",
-        "pkg": "main/pipx"
+        "via": "custom",
+        "handler": "pipx"
       },
       "linux": {
         "via": "apt",
@@ -187,8 +180,8 @@
       "name": "git-filter-repo",
       "category": "vcs",
       "win": {
-        "via": "scoop",
-        "pkg": "main/git-filter-repo"
+        "via": "custom",
+        "handler": "git-filter-repo"
       },
       "linux": {
         "via": "apt",
@@ -213,8 +206,8 @@
       "name": "jdk21",
       "category": "runtime",
       "win": {
-        "via": "scoop",
-        "pkg": "java/temurin21-jdk"
+        "via": "winget",
+        "pkg": "EclipseAdoptium.Temurin.21.JDK"
       },
       "linux": {
         "via": "apt",
@@ -227,8 +220,8 @@
       "name": "maven",
       "category": "runtime",
       "win": {
-        "via": "scoop",
-        "pkg": "main/maven"
+        "via": "custom",
+        "handler": "maven"
       },
       "linux": {
         "via": "apt",
@@ -240,8 +233,8 @@
       "name": "gradle",
       "category": "runtime",
       "win": {
-        "via": "scoop",
-        "pkg": "main/gradle"
+        "via": "custom",
+        "handler": "gradle"
       },
       "linux": {
         "via": "apt",
@@ -253,8 +246,8 @@
       "name": "go",
       "category": "runtime",
       "win": {
-        "via": "scoop",
-        "pkg": "main/go"
+        "via": "winget",
+        "pkg": "GoLang.Go"
       },
       "linux": {
         "via": "apt",
@@ -266,8 +259,8 @@
       "name": "mingw",
       "category": "cpp",
       "win": {
-        "via": "scoop",
-        "pkg": "main/mingw"
+        "via": "custom",
+        "handler": "mingw"
       },
       "linux": null,
       "verify": "gcc --version"
@@ -296,8 +289,8 @@
       "name": "cmake",
       "category": "cpp",
       "win": {
-        "via": "scoop",
-        "pkg": "main/cmake"
+        "via": "winget",
+        "pkg": "Kitware.CMake"
       },
       "linux": {
         "via": "apt",
@@ -309,8 +302,8 @@
       "name": "ninja",
       "category": "cpp",
       "win": {
-        "via": "scoop",
-        "pkg": "main/ninja"
+        "via": "winget",
+        "pkg": "Ninja-build.Ninja"
       },
       "linux": {
         "via": "apt",
@@ -322,8 +315,8 @@
       "name": "ripgrep",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/ripgrep"
+        "via": "winget",
+        "pkg": "BurntSushi.ripgrep.MSVC"
       },
       "linux": {
         "via": "apt",
@@ -335,8 +328,8 @@
       "name": "fd",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/fd"
+        "via": "winget",
+        "pkg": "sharkdp.fd"
       },
       "linux": {
         "via": "apt",
@@ -348,8 +341,8 @@
       "name": "fzf",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/fzf"
+        "via": "winget",
+        "pkg": "junegunn.fzf"
       },
       "linux": {
         "via": "apt",
@@ -361,8 +354,8 @@
       "name": "bat",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/bat"
+        "via": "winget",
+        "pkg": "sharkdp.bat"
       },
       "linux": {
         "via": "apt",
@@ -374,8 +367,8 @@
       "name": "eza",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/eza"
+        "via": "winget",
+        "pkg": "eza-community.eza"
       },
       "linux": {
         "via": "apt",
@@ -388,8 +381,8 @@
       "name": "jq",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/jq"
+        "via": "winget",
+        "pkg": "jqlang.jq"
       },
       "linux": {
         "via": "apt",
@@ -401,8 +394,8 @@
       "name": "shellcheck",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/shellcheck"
+        "via": "winget",
+        "pkg": "koalaman.shellcheck"
       },
       "linux": {
         "via": "apt",
@@ -414,8 +407,8 @@
       "name": "curl",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/curl"
+        "via": "winget",
+        "pkg": "cURL.cURL"
       },
       "linux": {
         "via": "apt",
@@ -427,8 +420,8 @@
       "name": "wget",
       "category": "cli",
       "win": {
-        "via": "scoop",
-        "pkg": "main/wget"
+        "via": "winget",
+        "pkg": "JernejSimoncic.Wget"
       },
       "linux": {
         "via": "apt",
@@ -466,8 +459,8 @@
       "name": "awscli",
       "category": "cloud",
       "win": {
-        "via": "scoop",
-        "pkg": "main/aws"
+        "via": "winget",
+        "pkg": "Amazon.AWSCLI"
       },
       "linux": {
         "via": "custom",
@@ -479,8 +472,8 @@
       "name": "micro",
       "category": "editor",
       "win": {
-        "via": "scoop",
-        "pkg": "main/micro"
+        "via": "winget",
+        "pkg": "zyedidia.micro"
       },
       "linux": {
         "via": "apt",
@@ -492,8 +485,8 @@
       "name": "zed",
       "category": "editor",
       "win": {
-        "via": "scoop",
-        "pkg": "extras/zed"
+        "via": "winget",
+        "pkg": "ZedIndustries.Zed"
       },
       "linux": {
         "via": "custom",
@@ -518,8 +511,8 @@
       "name": "JetBrainsMono-NF",
       "category": "font",
       "win": {
-        "via": "scoop",
-        "pkg": "nerd-fonts/JetBrainsMono-NF"
+        "via": "custom",
+        "handler": "nerdfont-jbm"
       },
       "linux": {
         "via": "custom",

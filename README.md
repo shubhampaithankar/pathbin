@@ -18,7 +18,7 @@ Driven by [`manifest.json`](./manifest.json). Edit that file to add/remove tools
 | **Editors** | micro, Zed, Terax |
 | **Fonts** | JetBrainsMono Nerd Font |
 
-Windows uses **scoop** as the primary package manager (auto-bootstrapped). Linux uses **apt** with extra repos for Adoptium / GitHub CLI / eza added on demand.
+Windows uses **winget** (built into Windows 10/11 — no bootstrap needed). Linux uses **apt** with extra repos for Adoptium / GitHub CLI / eza added on demand. A handful of tools with no winget/apt package use per-tool custom handlers.
 
 ## Bootstrap on a fresh machine
 
@@ -82,14 +82,13 @@ Each tool row:
 {
   "name":   "ripgrep",
   "category": "cli",
-  "win":   { "via": "scoop", "pkg": "main/ripgrep" },
+  "win":   { "via": "winget", "pkg": "BurntSushi.ripgrep.MSVC" },
   "linux": { "via": "apt",   "pkg": "ripgrep" },
   "verify": "rg --version"
 }
 ```
 
 `via` accepts:
-- `scoop` — `scoop install <pkg>` (Windows)
 - `winget` — `winget install --id <pkg>` (Windows)
 - `apt` — `sudo apt-get install -y <pkg>` (Linux); add `"repo": "<id>"` to require a repo from `apt_repos`
 - `custom` — dispatches to a named handler in the script (Bun, rustup, nvm, etc.)
@@ -105,8 +104,8 @@ Add the entry to `manifest.json` with `"via": "custom", "handler": "<name>"`, th
 
 ## What the scripts touch
 
-- **PATH**: scoop / cargo / rustup / bun / nvm install into user-scope dirs and update PATH themselves. The scripts also patch:
-  - Windows: `$PROFILE` — prepends `~/.bun/bin`, `~/.cargo/bin`, `~/.local/bin`; inits starship.
+- **PATH**: winget / cargo / rustup / bun / nvm install into user-scope dirs and update PATH themselves. The scripts also patch:
+  - Windows: `$PROFILE` — prepends `~/.bun/bin`, `~/.cargo/bin`, `~/.local/bin`, and the `%LOCALAPPDATA%\Programs\{maven,gradle,mingw64}\bin` dirs used by the custom handlers.
   - Linux: `~/.bashrc` and `~/.zshrc` — same idea, plus loads `nvm`.
 - **No system-wide changes** beyond what apt requires (sudo for installs and `/etc/apt/keyrings/*`).
 
